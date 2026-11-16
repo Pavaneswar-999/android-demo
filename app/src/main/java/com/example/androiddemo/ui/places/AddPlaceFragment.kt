@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.androiddemo.R
 import com.example.androiddemo.databinding.FragmentAddPlaceBinding
 import com.example.androiddemo.location.LocationHelper
 import java.util.Locale
@@ -103,7 +104,7 @@ class AddPlaceFragment : Fragment() {
             onSuccess = { location ->
                 if (location != null) {
                     if (binding.etName.text.isNull_or_blank()) {
-                        binding.etName.setText("My Location")
+                        binding.etName.setText(getString(R.string.label_my_location))
                     }
                     binding.etLat.setText(String.format(Locale.US, "%.4f", location.latitude))
                     binding.etLon.setText(String.format(Locale.US, "%.4f", location.longitude))

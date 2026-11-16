@@ -29,4 +29,14 @@
     <string name="msg_notification_permission_required">Notification permission allows the app to send daily flood alerts.</string>
     <string name="msg_no_forecast_data">No forecast data available for this location.</string>
     <string name="msg_retry">Retry</string>
+
+    <!-- Additional Extracted Strings -->
+    <string name="label_places">Places</string>
+    <string name="label_30_day_forecast">30-Day Discharge Forecast</string>
+    <string name="label_fetching_forecast">Fetching river flood forecast…</string>
+    <string name="btn_select">Select</string>
+    <string name="btn_delete">Delete</string>
+    <string name="label_no_monitored_places">No monitored places added yet.</string>
+    <string name="title_add_monitored_location">Add Monitored Location</string>
+    <string name="label_my_location">My Location</string>
 </resources>

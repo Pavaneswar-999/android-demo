@@ -1,5 +1,6 @@
 package com.example.androiddemo.ui.login
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,8 +38,10 @@ class LoginViewModel : ViewModel() {
         )
     }
 
-    fun signOut() {
-        FirebaseAuthManager.signOut()
-        _userState.value = null
+    fun signOut(context: Context? = null, webClientId: String? = null, onComplete: (() -> Unit)? = null) {
+        FirebaseAuthManager.signOut(context, webClientId) {
+            _userState.value = null
+            onComplete?.invoke()
+        }
     }
 }

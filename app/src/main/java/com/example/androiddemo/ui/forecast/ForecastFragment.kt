@@ -42,9 +42,12 @@ class ForecastFragment : Fragment() {
         }
 
         binding.btnLogout.setOnClickListener {
-            FirebaseAuthManager.signOut()
-            Toast.makeText(requireContext(), "Signed out", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_forecastFragment_to_loginFragment)
+            val resId = resources.getIdentifier("default_web_client_id", "string", requireContext().packageName)
+            val webClientId = if (resId != 0) getString(resId) else null
+            FirebaseAuthManager.signOut(requireContext(), webClientId) {
+                Toast.makeText(requireContext(), "Signed out successfully", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_forecastFragment_to_loginFragment)
+            }
         }
 
         binding.btnRetry.setOnClickListener {

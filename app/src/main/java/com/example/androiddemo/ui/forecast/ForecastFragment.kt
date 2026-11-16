@@ -38,7 +38,10 @@ class ForecastFragment : Fragment() {
         observeViewModel()
 
         binding.btnManagePlaces.setOnClickListener {
-            findNavController().navigate(R.id.action_forecastFragment_to_placesFragment)
+            val navController = findNavController()
+            if (navController.currentDestination?.id == R.id.forecastFragment) {
+                navController.navigate(R.id.action_forecastFragment_to_placesFragment)
+            }
         }
 
         binding.btnLogout.setOnClickListener {
@@ -46,7 +49,10 @@ class ForecastFragment : Fragment() {
             val webClientId = if (resId != 0) getString(resId) else null
             FirebaseAuthManager.signOut(requireContext(), webClientId) {
                 Toast.makeText(requireContext(), "Signed out successfully", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_forecastFragment_to_loginFragment)
+                val navController = findNavController()
+                if (navController.currentDestination?.id == R.id.forecastFragment) {
+                    navController.navigate(R.id.action_forecastFragment_to_loginFragment)
+                }
             }
         }
 

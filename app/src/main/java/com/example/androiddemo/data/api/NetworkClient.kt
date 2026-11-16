@@ -9,7 +9,7 @@ import javax.net.ssl.HttpsURLConnection
 
 object NetworkClient {
 
-    private const val BASE_URL = "https://api.openmeteo.com/"
+    private const val BASE_URL = "https://flood-api.openmeteo.com/"
 
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -17,7 +17,7 @@ object NetworkClient {
 
     private val okHttpClient = OkHttpClient.Builder()
         .hostnameVerifier { hostname, session ->
-            hostname.contains("openmeteo.com") || HttpsURLConnection.getDefaultHostnameVerifier().verify(hostname, session)
+            hostname.endsWith("openmeteo.com") || HttpsURLConnection.getDefaultHostnameVerifier().verify(hostname, session)
         }
         .build()
 

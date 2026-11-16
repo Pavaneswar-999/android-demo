@@ -32,21 +32,38 @@ class LoginFragment : Fragment() {
                     val idToken = account?.idToken
                     if (!idToken.isNullOrBlank()) {
                         viewModel.handleGoogleIdToken(idToken)
+                    } else if (account != null) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Signed in as ${account.email ?: account.displayName ?: "Google User"}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navigateToMainForecast()
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            "Google Sign-In failed: No ID Token returned. Continuing in Guest mode.",
-                            Toast.LENGTH_LONG
+                            "Google Sign-In failed. Proceeding in Guest mode.",
+                            Toast.LENGTH_SHORT
                         ).show()
                         navigateToMainForecast()
                     }
                 } catch (e: ApiException) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Google Sign-In error (${e.statusCode}). Proceeding in Guest mode.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    navigateToMainForecast()
+                    val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+                    if (account != null) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Welcome ${account.displayName ?: account.email ?: "User"}!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navigateToMainForecast()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Sign-In error (${e.statusCode}). Opening forecast in Guest mode.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navigateToMainForecast()
+                    }
                 }
             } else {
                 Toast.makeText(
@@ -114,29 +131,22 @@ class LoginFragment : Fragment() {
 
     private fun startGoogleSignInFlow() {
         val webClientId = getStringResourceByName("default_web_client_id")
-        if (webClientId.isNullOrBlank() || webClientId.contains("webclient.apps.googleusercontent.com")) {
-            Toast.makeText(
-                requireContext(),
-                "Opening River Flood Watch Forecast...",
-                Toast.LENGTH_SHORT
-            ).show()
-            navigateToMainForecast()
-            return
+        val gsoBuilder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestProfile()
+
+        if (!webClientId.isNullOrBlank() && !webClientId.contains("webclient.apps.googleusercontent.com")) {
+            gsoBuilder.requestIdToken(webClientId)
         }
 
         try {
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(webClientId)
-                .requestEmail()
-                .build()
-
-            val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+            val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gsoBuilder.build())
             googleSignInLauncher.launch(googleSignInClient.signInIntent)
         } catch (e: Exception) {
             Toast.makeText(
                 requireContext(),
-                "Sign-In error: ${e.localizedMessage}. Proceeding in Guest mode.",
-                Toast.LENGTH_LONG
+                "Opening River Flood Watch...",
+                Toast.LENGTH_SHORT
             ).show()
             navigateToMainForecast()
         }

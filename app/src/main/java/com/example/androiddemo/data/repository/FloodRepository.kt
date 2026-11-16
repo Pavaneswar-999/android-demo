@@ -6,6 +6,7 @@ import com.example.androiddemo.data.model.DailyRiskItem
 import com.example.androiddemo.data.model.FloodForecastResponse
 import com.example.androiddemo.data.model.FloodForecastSummary
 import com.example.androiddemo.data.model.RiskLevel
+import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,6 +26,12 @@ class FloodRepository(
             val response = api.getFloodForecast(latitude, longitude)
             val summary = processForecastResponse(placeName, latitude, longitude, response)
             Result.success(summary)
+        } catch (e: HttpException) {
+            if (e.code() == 404) {
+                Result.failure(IllegalStateException("No modeled river basin cell within 5km for $placeName (Lat: $latitude, Lon: $longitude). Please select a river location from Places."))
+            } else {
+                Result.failure(e)
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

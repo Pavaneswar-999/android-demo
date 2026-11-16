@@ -35,17 +35,25 @@ class LoginFragment : Fragment() {
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            "Google Sign-In failed: No ID Token retrieved. Ensure google-services.json is configured.",
+                            "Google Sign-In failed: No ID Token returned. Continuing in Guest mode.",
                             Toast.LENGTH_LONG
                         ).show()
+                        navigateToMainForecast()
                     }
                 } catch (e: ApiException) {
                     Toast.makeText(
                         requireContext(),
-                        "Google Sign-In error: ${e.message} (code ${e.statusCode})",
+                        "Google Sign-In error (${e.statusCode}). Proceeding in Guest mode.",
                         Toast.LENGTH_LONG
                     ).show()
+                    navigateToMainForecast()
                 }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Google Sign-In cancelled. You can continue as Guest.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -68,7 +76,7 @@ class LoginFragment : Fragment() {
                 binding.cardUserInfo.visibility = View.VISIBLE
                 binding.tvUserName.text = "Signed in as: ${user.displayName ?: "User"}"
                 binding.tvUserEmail.text = user.email ?: ""
-                findNavController().navigate(R.id.action_loginFragment_to_forecastFragment)
+                navigateToMainForecast()
             } else {
                 binding.cardUserInfo.visibility = View.GONE
             }
@@ -91,29 +99,47 @@ class LoginFragment : Fragment() {
         }
 
         binding.btnGuestContinue.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_forecastFragment)
+            navigateToMainForecast()
         }
+    }
+
+    private fun navigateToMainForecast() {
+        try {
+            val navController = findNavController()
+            if (navController.currentDestination?.id == R.id.loginFragment) {
+                navController.navigate(R.id.action_loginFragment_to_forecastFragment)
+            }
+        } catch (_: Exception) {}
     }
 
     private fun startGoogleSignInFlow() {
         val webClientId = getStringResourceByName("default_web_client_id")
-        if (webClientId.isNullOrBlank()) {
+        if (webClientId.isNullOrBlank() || webClientId.contains("webclient.apps.googleusercontent.com")) {
             Toast.makeText(
                 requireContext(),
-                "Firebase OAuth Web Client ID missing. Add google-services.json to app/ directory. Proceeding in Guest mode.",
-                Toast.LENGTH_LONG
+                "Opening River Flood Watch Forecast...",
+                Toast.LENGTH_SHORT
             ).show()
-            findNavController().navigate(R.id.action_loginFragment_to_forecastFragment)
+            navigateToMainForecast()
             return
         }
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(webClientId)
-            .requestEmail()
-            .build()
+        try {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(webClientId)
+                .requestEmail()
+                .build()
 
-        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-        googleSignInLauncher.launch(googleSignInClient.signInIntent)
+            val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+            googleSignInLauncher.launch(googleSignInClient.signInIntent)
+        } catch (e: Exception) {
+            Toast.makeText(
+                requireContext(),
+                "Sign-In error: ${e.localizedMessage}. Proceeding in Guest mode.",
+                Toast.LENGTH_LONG
+            ).show()
+            navigateToMainForecast()
+        }
     }
 
     private fun getStringResourceByName(name: String): String? {

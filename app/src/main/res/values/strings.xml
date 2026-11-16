@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">River Flood Watch</string>
+    <string name="title_login">River Flood Watch</string>
+    <string name="subtitle_login">Monitor river discharge and flood risk forecasts powered by Copernicus GloFAS &amp; Open-Meteo</string>
+    <string name="btn_google_sign_in">Sign In with Google</string>
+    <string name="btn_continue_guest">Continue as Guest / Skip Sign-In</string>
+    <string name="btn_sign_out">Sign Out</string>
+
+    <string name="disclaimer_title">Model Forecast Disclaimer</string>
+    <string name="disclaimer_text">Flood forecasts are based on the Open-Meteo Copernicus GloFAS model (~5km resolution). These are model estimates, not official flood warnings. Please consult local emergency authorities for official alerts.</string>
+
+    <string name="title_forecast">Flood Risk Forecast</string>
+    <string name="peak_discharge_label">30-Day Peak Discharge</string>
+    <string name="today_discharge_label">Today\'s Discharge</string>
+    <string name="risk_normal">Normal</string>
+    <string name="risk_watch">Watch</string>
+    <string name="risk_alert">Alert</string>
+
+    <string name="title_places">Monitored Locations</string>
+    <string name="btn_add_place">Add New Place</string>
+    <string name="btn_use_current_location">Use Current GPS Location</string>
+    <string name="btn_save">Save Location</string>
+
+    <string name="place_name_hint">Location Name (e.g. Rhine at Cologne)</string>
+    <string name="latitude_hint">Latitude (-90 to 90)</string>
+    <string name="longitude_hint">Longitude (-180 to 180)</string>
+
+    <string name="msg_location_permission_required">Location permission is required to fetch local flood forecasts.</string>
+    <string name="msg_notification_permission_required">Notification permission allows the app to send daily flood alerts.</string>
+    <string name="msg_no_forecast_data">No forecast data available for this location.</string>
+    <string name="msg_retry">Retry</string>
+</resources>

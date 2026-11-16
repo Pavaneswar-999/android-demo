@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#0061A4</color>
+    <color name="primary_dark">#00477B</color>
+    <color name="accent">#0288D1</color>
+    <color name="background">#F8F9FA</color>
+    <color name="surface">#FFFFFF</color>
+
+    <!-- Risk Level Colors -->
+    <color name="risk_normal_color">#2E7D32</color>
+    <color name="risk_normal_bg">#E8F5E9</color>
+    <color name="risk_watch_color">#E65100</color>
+    <color name="risk_watch_bg">#FFF3E0</color>
+    <color name="risk_alert_color">#C62828</color>
+    <color name="risk_alert_bg">#FFEBEE</color>
+</resources>
